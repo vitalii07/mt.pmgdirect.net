@@ -1,0 +1,36 @@
+<% if @messages.present? %>
+	<div id ="unprocessed_csheaders">
+		<% @messages.each do |msg| %>
+			<div>
+			<% if msg.status == "failed" %>
+				<p><%= "USPS data for #{msg.file_date.strftime("%m/%d/%Y")} was not processed." %></p>
+			<% elsif msg.status == "successed" %>
+				<p><%= "USPS data for #{msg.file_date.strftime("%m/%d/%Y")} loaded successfully." %></p>
+			<% elsif msg.status == "processing" %>
+				<p><%= "USPS data for #{msg.file_date.strftime("%m/%d/%Y")} is currently being processed." %></p>
+			<% elsif msg.status == "seeds file processing" %>
+				<p><%= "Seed Upload for Job ##{Job.find(msg.job_id).job_number} is in progress." %></p>
+			<% elsif msg.status == "version names unmatched" %>
+				<% job = Job.find(:first, :conditions => ['id = ?', msg.job_id]) %>
+				<% if job %>
+					<p><%= "Seeds for version #{msg.version_names.join(', ')} in the job ##{Job.find(msg.job_id).job_number} were not loaded because that version doesn't exist in MailTracker." %></p>
+				<% end %>
+			<% end %>
+			<%= link_to '', message_path(msg), :method => :delete %>
+			</div>
+		<% end %>
+	</div>
+<% end %>
+
+<h1>Job Summary</h1>
+<%#= current_user.id%>
+<%#= current_user.employer.organization unless admin? || pmg_super? || pmg_user? %>
+<%= render(:partial => 'jobs/display')%>
+
+<br/>
+
+<%= link_to image_tag("/images/new_job.gif"), new_job_path if admin?%>
+<div id = "pages">
+	<%= will_paginate(@jobs) %>
+</div>
+

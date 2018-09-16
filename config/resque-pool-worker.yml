@@ -1,0 +1,15 @@
+development:
+  recalc_all: 4
+  sync_seeds: 4
+  archive_jobs: 1
+  add_seeds: 0
+production:
+  recalc_all: 4
+  sync_seeds: 4
+  archive_jobs: 1
+  add_seeds: 0
+staging:
+  recalc_all: 4
+  sync_seeds: 4
+  archive_jobs: 1
+  add_seeds: 0

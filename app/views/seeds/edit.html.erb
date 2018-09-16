@@ -1,0 +1,13 @@
+<h1>Editing seed</h1>
+
+<%= error_messages_for :seed %>
+
+<% form_for(@seed) do |f| %>
+  <p>
+  	<%= render(:partial => 'form') %>
+    <%= f.submit "Update", :class => 'large-button' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @seed %> |
+<%= link_to 'Back', seeds_path %>

@@ -1,0 +1,61 @@
+<div id ="job_list">
+<table width= "100%">
+  <tr>
+    <th colspan="13" class="blue">
+      <%= render :partial => "shared/search_form" %>
+    </th>
+  </tr>
+  <tr class="green">
+  	<th><%= sort_link 'Job No', 'job_number' %></th>
+  	<th><%= sort_link 'Client', "clients.organization"%></th>
+  	<th width = "111px"><%= sort_link 'Job Name', 'job_name' %></th>
+  	<th><%= sort_link "Total<br/> Qty", 'c_total_qty_sent' %></th>
+  	<th><%= sort_link "Mail<br/> Date", 'mail_date' %></th>
+  	<th><%= sort_link "Mailshop", 'c_first_mailshop' %></th>
+  	<th><%= sort_link "Seeds<br/>Sent", 'c_total_seeds_sent' %></th>
+  	<th><%= sort_link "Seeds<br/>Scanned", 'c_total_seeds_delivered' %></th>
+  	<th><%= sort_link "% Scanned", 'c_total_percent_seeds_delivered' %></th>
+  	<th><%= sort_link "Avg<br/>Scanned", 'c_summed_average_delivered' %></th>
+    <th><%= sort_link "Returns<br/>Sent", 'c_total_returns_sent' %></th>
+    <th><%= sort_link "Returns<br/>Received", 'c_total_returns_received' %></th>
+  	<%= "<th width='55px'>Action</th>" if admin?%>
+  </tr>
+  
+<% for job in @jobs %>
+
+  <tr class="<%= cycle("even", "odd") %>">
+  	<td><%= link_to job.job_number, job_path(job) %></td>
+  	<td><%= job.client.organization%></td>
+  	<td><%= truncate( word_wrap(job.job_name, :line_width => 10 ), :length =>75) %></td>
+  	<td><%= ts(job.total_qty_sent) %></td>
+  	<td><%= job.mail_date.strftime("%m-%d-%y") if job.mail_date %></td>
+  	<td width="60px"><%= job.first_mailshop if job.versions.size !=0 %>
+  	</td>
+  	<td><%= job.total_seeds_sent %></td>
+  	<td><%= job.total_seeds_delivered %></td>
+    <% if job.number_of_non_zero_versions  %>
+			<td><%= to_decimal(job.total_percent_seeds_delivered || 0.0)%>%</td>
+			<td><%= job.summed_average_delivered %> days </td>
+		<% else %>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		<% end %>
+	
+    <% unless job.track_returns_type.nil? %>
+      <th><%= job.total_returns_sent_numbers %></th>
+      <th><%= job.total_returns_received_numbers %></th>
+    <% else %>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    <% end %>
+		
+		<% if admin? %>
+		<td><%= link_to '<span title="View this job"><img src="/images/show.gif">', job %>
+		<%= link_to '<span title="Edit job"><img src="/images/edit.gif">', edit_job_path(job) %>
+		<%= link_to '<span title="Delete job"><img src="/images/delete.gif">', job_path(job), :confirm => 'remove this job?', :method => :delete %>
+		</td>
+		<% end %>
+  </tr>
+<% end %>
+</table>
+</div>

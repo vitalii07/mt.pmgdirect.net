@@ -1,0 +1,16 @@
+<% if @job.present? %>
+<h2>Job Number: <%= link_to @job.job_number, job_path(@job) %> | Client Job Number: <%= @job.client_job_number ? @job.client_job_number : 'N/A'%> </h2>
+<div id ="add_version" style="display:none">
+  <%= form_tag({:controller => 'versions', :action=>'create', :id => params[:id]}, :multipart => true, :html => {:name => 'job_form'})%>
+  <p>
+    <%= render(:partial => 'jobs/version_form') %>
+    <%= submit_tag "Create", :class => "large-button" %>
+  </p>
+ </form>
+</div>
+
+<%= render :partial => "versions" %>
+<div id = "seeds" style="display:none">
+<!-- keep this div -->
+</div>
+<% end %>

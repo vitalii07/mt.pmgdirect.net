@@ -1,0 +1,55 @@
+<div id = "context">
+	<b><%= link_to @job.job_number, job_path(params[:id]) %></b> (<%= @job.client.organization %>)<br/>
+	<b>Job Name:</b> <%= @job.job_name %> &nbsp;&nbsp;
+	<b>Versions:</b> <%= @versions.size %>
+</div>
+
+<div id ="add_version" style="display:none">
+
+
+<%= form_tag({:controller => 'versions', :action=>'create', :id => params[:id]}, :multipart => true, :html => {:name => 'job_form'})%>
+
+  <p>
+   	<%= render(:partial => 'jobs/version_form') %>
+    <%= submit_tag "Create" %>
+  </p>
+ </form>
+</div>
+
+<!--  start the versions here -->
+<table>
+	<tr>
+		<th>Version</th>
+		<th>Seeds</th>
+		<th>Mail Date</th>
+		<th>Qty</th>
+		<th>Mail Shop</th>
+		<th>Class</th>
+		<th>Type</th>
+		<th>Planet Code</th>
+		<th>Action</th>
+	</tr>
+	<% for version in @versions do %>
+	<tr>
+		<td><%= link_to version.version_name, version %></td>
+		<td><%= version.seeds.size %></td>
+		<td><%= version.mail_date.strftime("%b %d, %Y") %></td>
+		<td><%= version.quantity %> </td>
+		<td><%= version.mailshop.name %> </td>
+		<td><%= version.mail_class %> </td>
+		<td><%= version.mail_type %> </td>
+		<td><%= version.planet_code %><%=version.check_digit %></td>
+		<td><%= link_to '<img src="/images/show.gif">', version %>
+				<% if admin? %>
+				<%= link_to '<img src="/images/edit.gif">', edit_version_path(version) %>
+				<%= link_to '<img src="/images/delete.gif">', version_path(version), :confirm => 'remove this version?', :method => delete %>
+				<% end %>
+				</td>
+	</tr>
+	<% end %>
+</table>
+
+
+<div id = "seeds" style="display:none">
+<!-- keep this div -->
+</div>

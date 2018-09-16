@@ -1,0 +1,37 @@
+<%= GMap.header %>
+<%= @map.to_html %>
+<%= @map.div(:width => 750, :height => 425) %>
+
+<table width = "100%">
+  <tr class="blue">
+    <th colspan="10">
+      <%= render :partial => "shared/search_form", :locals => {:job => @job} %>
+    </th>
+  </tr>
+   <tr class="green"> 
+    <th>Qty</th>
+    <th>Mail Date</th>
+    <th>Mail Shop</th>
+    <th>Seeds Sent</th>
+    <th>Returns Scanned</th>
+    <th>% Scanned</th>
+    <th>Avg Scanned</th>
+    <%= "<th>Action</th>" if admin? %>
+  </tr>
+  <tr class="<%= cycle("even", "odd") %>">
+
+    <td><%= ts(@job.versions.collect(&:quantity).sum) %> </td>
+    <td><%= @job.mail_date.strftime("%m-%d-%y") %></td>
+    <td><%= @job.c_first_mailshop %> </td>
+    <td><%= @job.versions.collect{|v| v.seeds.size}.sum %></td>
+    <td><%= @total_returns %></td>
+    <td><%= to_decimal(@total_returns_perc)%></td>
+    <td><%= @total_avg_delivered %></td>
+        <% if admin? %>
+        <td>
+        <%= link_to '<img src="/images/edit.gif">', edit_job_path(@job) %>
+        <%= link_to '<img src="/images/delete.gif">', job_path(@job), :confirm => 'remove this version?', :method => :delete %>
+        </td>
+        <% end %>
+  </tr>
+</table>

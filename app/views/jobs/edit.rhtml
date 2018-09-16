@@ -1,0 +1,8 @@
+<div id = "context">Editing job</div>
+
+<%= error_messages_for :job %>
+
+<%= render :partial => "form" %>
+
+<%= link_to 'Show', job_path(@job) %> |
+<%= link_to 'Back', jobs_path %>

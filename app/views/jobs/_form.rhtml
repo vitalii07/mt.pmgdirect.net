@@ -1,0 +1,140 @@
+<% nested_form_for(@job, :html => {:multipart => true, :name => 'job_form', :id => "job-form"}) do |f| %>
+
+  <p>
+  <%= f.label :job_number, "PMG Job Number" %><br/>
+  <%= f.text_field :job_number -%>
+  </p>
+
+  <p>
+    <%= f.label :client_job_number, "Client Job Number" %><br/>
+    <%= f.text_field :client_job_number %>
+  </p>
+
+  <p>
+  <%= f.label :client_id, "Client" %><br/>
+  <%= f.select :client_id, @clients.map {|client| [client.organization, client.id]}, :id => "client_name" %>
+  </p>
+
+  <p>
+  <%= f.label :job_name, "Job Name" %><br/>
+  <%= f.text_field :job_name %>
+  </p>
+
+  <%= f.hidden_field :track_returns_type %>
+ 
+  <p>
+    <input id="track_returns" name="track_returns" type="checkbox">Track Returns</input>
+  </p>
+
+  <div id ="track_options" style="display:none">
+	  <p>
+	    <input id="track_by_job" name = "job[track_returns_type]" value="job" type="radio">Track by Job</input>
+	  </p>
+	  <p>
+	    <input id="track_by_version" name = "job[track_returns_type]" value="version" type="radio">Track by Version</input>
+	  </p>
+	</div>
+
+  <% f.fields_for :versions do |vf| %>
+    <div class="version-form">
+      <p><%= vf.label :version_name, "Version Name:" %> <%= vf.text_field :version_name %></p>
+      <p class="version_tracking_number" style="display:none">
+        <%= vf.label :version_tracking_number, "Version Tracking Number:" %> 
+        <%= vf.text_field :version_tracking_number %>
+        <span class="empty_error">Please fill 4 digits, not '0000'</span>
+      </p>
+      <p><%= vf.label :mailshop, "Mailshop:" %> <%= vf.select :mailshop_id, 
+        @mailshops.map {|mailshop| [mailshop.name, mailshop.id] }, 
+        {:include_blank => "Select a Mailshop"}, 
+        :class => "mailshop copy" %></p>
+      <p><%= vf.label :mail_class, "Mail Class:" %> <%= vf.select :mail_class, 
+        mail_class_options, 
+        {:include_blank => "Select Mail Class"}, 
+        :class => "mail_class copy" %></p>
+      <p><%= vf.label :mail_type, "Mail Type:" %> <%= vf.select :mail_type,
+        mail_type_options, 
+        {:include_blank => "Select Mail Type"}, 
+        :class => "mail_type copy" %></p>
+      <p><%= vf.label :quantity, "Quantity:" %>
+          <%= vf.text_field :quantity, :size => 6, :class => "quantity" %></p>
+      <p><%= vf.label :mail_date, "Mail date:" %>
+      <%= vf.date_select :mail_date, {}, :class => "mail_date copy" %></p>
+      <p><%= vf.link_to_remove "Remove" %></p>
+    </div>
+  <% end %>
+
+  <div><%= f.link_to_add "Add a Version", :versions %></div>
+
+  <p>
+    <%= f.label :seeds_definition_file, "Seeds:" %> <%= f.file_field :seeds_definition_file %>
+  </p>
+
+  <p><%= submit_tag "Save", :class => "submit" %></p>
+<% end %>
+
+<% content_for :head do %>
+  <%= stylesheet_link_tag "jquery-ui-1.8.17.custom" %>
+  <%= javascript_include_tag "jquery-ui-1.8.17.custom.min" %>
+  <%= javascript_include_tag "nested_form" %>
+<% end %>
+
+<script>
+  if (jQuery("#job_track_returns_type").val() == 'job') {
+    console.log("is job");
+    jQuery('#track_returns').attr("checked", true);
+    jQuery('#track_options').css('display', 'inline-block');
+    jQuery('#track_by_job').attr("checked", true);
+  } 
+  else if (jQuery("#job_track_returns_type").val() == 'version') {
+    console.log("is version");
+    jQuery('#track_returns').attr("checked", true);
+    jQuery('#track_options').css('display', 'inline-block');
+    jQuery('#track_by_version').attr("checked", true);
+    jQuery('.version-form .version_tracking_number').css('display', 'inline-block');
+  }
+
+	jQuery("#track_returns").click(function() {		
+		if (jQuery('#track_returns').is(':checked') == true) {
+			jQuery('#track_options').css('display', 'inline-block');
+      jQuery('#track_by_job').attr("checked", true);
+		}
+		else {
+			jQuery('#track_by_job').attr("checked", false);
+			jQuery('#track_by_version').attr("checked", false);
+			jQuery('#track_options').css('display', 'none');
+			jQuery('.version-form .version_tracking_number input').val("");
+			jQuery('.version-form .version_tracking_number').css('display', 'none');			
+		}
+	});
+	
+  jQuery("input:radio").change(function() {
+    console.log("clicked");
+  	if (jQuery('#track_by_version').is(':checked') == true) { 
+			jQuery('.version-form .version_tracking_number').css('display', 'inline-block');
+		}
+		else {
+			jQuery('.version-form .version_tracking_number input').val("");
+      jQuery('.empty_error').css('display','none');
+			jQuery('.version-form .version_tracking_number').css('display', 'none');
+		}
+  });		
+
+  // validation form fields before submit
+  jQuery("#job-form .submit").click(function(event) {   
+    var errors = null;
+    if (jQuery('#track_returns').is(':checked') && jQuery('#track_by_version').is(':checked')){
+      jQuery('#job-form .version_tracking_number input').each(function(){
+        if (jQuery(this).val() == '' || jQuery(this).val() == '0000'){
+          jQuery(this).next().css('display','block');
+          jQuery(this).parent().find('empty_error').css('display','block');
+          errors = true;
+        }
+      });
+    }
+    if (errors) {
+      event.preventDefault();
+    }
+  });    
+</script>
+
+

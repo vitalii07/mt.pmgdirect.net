@@ -1,0 +1,26 @@
+<h2>Job Number: <%= link_to @job.job_number, job_path(@job) %></h2>
+
+<table width= "100%;">
+  <tr class="blue">
+    <th colspan="10">
+      <%= render :partial => "shared/search_form", :locals => {:job => @job} %>
+    </th>
+  </tr>
+</table>
+
+<div id ="delivery_graph"><%=@job.job_number %></div>
+<div id ="graph-legend">
+  <b>Total Qty: </b><%= ts(@job.versions.map {|x| x.quantity}.sum) %><br/>
+  <b>Seeds Sent: </b><%= ts(@job.versions.map {|y| y.seeds.size}.sum) %><br/>
+  <b>Seeds Delivered: </b><%= ts(@job.total_seeds_delivered)  %><br/>
+  <b>% Delivered: </b><%= to_decimal(@job.total_percent_seeds_delivered || 0.0) %>%<br/>
+  <b>Average Delivery: </b><%= @job.summed_average_delivered %> days
+</div>
+<br/><br/><br/><br/>
+<div id ="returns_delivery_graph"></div>
+
+<script type="text/javascript">
+  var returns = jQuery.parseJSON('<%= raw @returns.to_json %>');
+</script>
+<%= javascript_include_tag "job_graph" %>
+

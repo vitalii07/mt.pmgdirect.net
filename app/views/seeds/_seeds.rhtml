@@ -1,0 +1,21 @@
+<table>
+<% for seed in @seeds %>
+	<tr class="<%= cycle("even", "odd") %>">
+		<td><%= seed.reference_name %>&nbsp;</td>
+		<td><%= seed.scf.description if seed.scf %></td>
+		<td><%= link_to 'edit', edit_seed_path(seed) %></td>
+		<td><%= link_to '[ x ]', seed_path(seed), :confirm => 'Are you sure?', :method => :delete %></td>
+	</tr>
+<% end %>
+</table>
+<div id ="pages">
+<%= will_paginate @seeds %>
+</div>
+<div id ="seed_upload" style="display:none">
+  <%= form_tag({:controller => 'jobs', :action=> 'uploadseeds'}, :multipart => true)%>
+
+  <%= text_field :uploads, :job_id, :value => params[:id] %>
+  <%= file_field("uploads", "file") %>
+  <%= submit_tag "Upload", :class => "large-button" %>
+  <br/>
+</form>

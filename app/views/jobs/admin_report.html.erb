@@ -1,0 +1,12 @@
+<% for version in @versions %>
+
+<table>
+<tr>
+<td><%= version.job.job_number %>,</td>
+<td><%= version.id %>,
+<td><%= version.version_name%>,</td>
+<td><%= version.planet_code %><%= version.check_digit %></td>
+</tr>
+</table>
+
+<% end %>

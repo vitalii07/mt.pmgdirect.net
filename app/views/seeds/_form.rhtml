@@ -1,0 +1,15 @@
+
+
+<p><label for="zipcode">Zip Code</label><br/> 
+<%= text_field :seed, :zipcode %></p>
+
+<p><label for="postnet">Postnet</label><br/> 
+<%= text_field :seed, :postnet %></p>
+
+<p><label for="zipcode">IMB</label><br/> 
+<%= text_field :seed, :imb %></p>
+
+<p><label for="state">State</label><br/> 
+<%= text_field :seed, :state %></p>
+
+<%= hidden_field :seed, :version_id, :value => params[:version]%><br/>

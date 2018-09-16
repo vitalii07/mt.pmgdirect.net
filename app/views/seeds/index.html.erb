@@ -1,0 +1,24 @@
+<h1>Listing seeds</h1>
+
+<table>
+  <tr>
+    <th>Seed ID</th>
+    <th>Version</th>
+    <th>Actions</th>
+  </tr>
+
+<% for seed in @seeds %>
+  <tr class="<%= cycle("even", "odd") %>">
+    <td><%= seed.imb_id %></td>
+    <td><%= seed.version.present? ? seed.version.version_name : nil %></td>
+    <td><%= link_to 'Show', seed %>
+    <%= link_to 'Edit', edit_seed_path(seed) %>
+    <%= link_to 'Destroy', seed, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+<div id = "pages">
+  <%= will_paginate(@seeds) %>
+</div>

@@ -1,0 +1,96 @@
+<!--  start the versions here -->
+<table width = "100%">
+  <tr class="blue">
+    <th colspan="12">
+      <%= render :partial => "shared/search_form", :locals => {:job => @job} %>
+    </th>
+  </tr>
+  <tr class="green">
+    <th>Version</th>
+    <th>Qty</th>
+    <th>Mail<br/> Date</th>
+    <th>Mail<br/> Shop</th>
+    <th width = 80px>Class</th>
+    <%= "<th>Planet Code</th>" if admin? %>
+    <th>Seeds<br/> Sent</th>
+    <th>Seeds<br/> Scanned</th>
+    <th>% Scanned</th>
+    <th>Avg Scanned</th>
+    <th><%= sort_link "Returns<br/>Sent", 'c_total_returns_sent' %></th>
+    <th><%= sort_link "Returns<br/>Received", 'c_total_returns_received' %></th>
+  </tr>
+  <% for version in @job.versions do %>
+  <tr class="<%= cycle("even", "odd") %>">
+    <td><%= link_to version.version_name,version_path(version,:scope=>'version') %></td>
+    <td><%= ts(version.quantity) %> </td>
+    <td><%= version.mail_date.strftime("%m-%d-%y") %></td>
+    <td>
+      <% if version.mailshop.present? %>
+        <%= version.mailshop.name %>
+        <% if version.mailshop.address.present? and version.mailshop.address.size > 0 %>
+          <%= "(" + version.mailshop.address + ")" %>
+        <% end %>  
+      <% end %>
+    </td>
+    <td><%= mailclass_convert(version.mail_class)%> </td>
+  
+    <%= "<td>#{version.planet_code}#{version.check_digit}</td>" if admin? %>
+      
+    <td><%= version.seeds.size %></td>
+    <td><%= version.total_seeds_delivered %> </td>
+    <td><%= to_decimal(version.total_percent_seeds_delivered) %>%</td>
+    <td>
+    <% if version.summed_average_delivered %>
+      <%= version.summed_average_delivered.to_s + " days"%> 
+    <% else %>
+      n/a
+    <% end %>
+    </td>
+    <% if version.version_tracking_number.present? %>
+      <th><%= version.total_returns_sent %></th>
+      <th><%= version.total_returns_received %></th>
+    <% else %>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    <% end %>
+  </tr>
+  <% end %>
+  
+  <tr class="grey">
+    <th class="total-top">Totals</th>
+    <th class="total-top">Qty</th>
+    <th class="total-top"></th>
+    <th class="total-top"></th>
+    <%= '<th class="total-top"></th>' if admin? %>
+    <th class="total-top"></th>
+    <th class="total-top">Seeds<br/>Sent</th>
+    <th class="total-top">Seeds<br/> Scanned</th>
+    <th class="total-top">% Scanned</th>
+    <th class="total-top" >Avg Scanned</th>
+    <th class="total-top" >Returns<br/>Sent</th>
+    <th class="total-top" >Returns<br/>Received</th>
+  </tr>
+  <tr>
+    <td class="total-top total-bottom">&nbsp;</td>
+    <td class="total-top total-bottom"><%= ts(@job.versions.map {|x| x.quantity}.sum) %></td>
+
+    <td class="total-top total-bottom">&nbsp;</td>
+
+    <td class="total-top total-bottom">&nbsp;</td>
+    <td class="total-top total-bottom">&nbsp;</td>
+    <%= '<td class="total-top total-bottom"  >&nbsp;</td>' if admin? %>
+    <td class="total-top total-bottom"><%= ts(@job.versions.map {|y| y.seeds.size}.sum) %></td>
+    <td class="total-top total-bottom"><%= ts(version.job.total_seeds_delivered) if version %></td>
+    <% if @job.number_of_non_zero_versions %>
+      <td class="total-top total-bottom"><%= to_decimal(@job.total_percent_seeds_delivered || 0.0) %>%</td>
+      <td class="total-top total-bottom"><%= @job.summed_average_delivered %> days </td>
+      <td class="total-top total-bottom"><%= @job.total_returns_sent_numbers %></td>
+      <td class="total-top total-bottom"><%= @job.total_returns_received_numbers %></td>
+    <% else %>
+      <td class="total-top total-bottom">&nbsp;</td>
+      <td class="total-top total-bottom">&nbsp;</td>
+      <td class="total-top total-bottom">&nbsp;</td>
+      <td class="total-top total-bottom">&nbsp;</td>
+    <% end %>
+  </tr>
+</table>

@@ -1,0 +1,28 @@
+<h1>Jobs</h1>
+
+<table>
+  <tr>
+  	<th width= 200 align="left"> Job Number </th>
+  	<th width= 200 align="left"> Job Name </th>
+  	<th width= 300 align="left"> Client </th>
+  </tr>
+  
+<% for job in @jobs %>
+<% versions = Job.find(:all, :conditions => ['job_number = ?', job.job_number]) %>
+  <tr>
+  	<td><%= link_to job.job_number, job_path(job) %></td>
+  	<td><%= job.job_name %></td>
+  	<td><%= job.client.organization %></td>
+		<td><%= link_to '<img src="/images/show.gif">', job %>
+		<% if admin? %>
+		<%= link_to '<img src="/images/edit.gif">', edit_job_path(job) %>
+		<%= link_to '<img src="/images/delete.gif">', job_path(job), :confirm => 'remove this version?', :method => :delete %>
+		<% end %>
+		</td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New job', new_job_path %>

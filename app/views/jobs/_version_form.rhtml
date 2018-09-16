@@ -1,0 +1,57 @@
+
+<% if admin? %>
+<p><label for="version">Version Name</label><br/>
+<%= text_field :version, :version_name %></p>
+
+
+<p><label for="mail_shop">Mail Shop</label><br/>
+<select name="mailshops[mailshop_id]">
+
+<% @mailshops.each do |mailshop| %>
+<option value="<%= mailshop.id %>"> 
+<%= mailshop.name %>
+</option>
+<% end %>
+</select></p>
+
+<p><label for="mail_class">Class of Mail</label><br/>
+<%= select(:version, :mail_class ,[ ['Select Mail Class', '0'],
+['1st Class Presort','firstpresort'],
+['1st Class Straight','firststraight'],
+['1st Class Commingle','firstcommingle'],
+['Standard Entry Point','standard'],
+['Standard Commingle', 'standardcommingle'],
+['Standard Drop Ship','standarddropship'],
+['Non-Profit Entry Point','standardnonprofit'],
+['Non Profit Drop Ship','nonprofitdropship'],
+['Non-Profit Commingle', 'nonprofitcommingle']
+])%>
+</p>
+
+<p><label for="mail_type">Mail Type</label><br/>
+<%= select(:version, :mail_type ,[ ['Select Mail Type', 0],
+['First Class Card', 46],
+['First Class Flats', 41],
+['First Class Letter', 40],
+['Periodical Flats', 45],
+['Periodical Letters', 44],
+['Standard Cards', 47],
+['Standard Flats', 43],
+['Standard Letters', 42]
+])%>
+</p>
+
+<p><label for "quantity">Quantity</label><br/>
+<%= text_field :version, :quantity %></p>
+
+</p>
+<p><label for "seeds">Select Seeds:</label></p>
+<br/>
+<%= file_field("uploads", "file") %>
+
+<% end %>
+</p>
+<p><label for "maildate">Mail Date</label> <br/>
+<%= date_select :version, :mail_date, :id => 'name', :name => 'name', :order => [:month, :day, :year], :default => Time.now %></p>
+
+

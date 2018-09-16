@@ -1,0 +1,40 @@
+	<div id = "copy_seeds">
+	<h2>Copy these seeds to another version:</h2>
+	<%= form_tag({:controller => 'seeds', :action=> 'copy_seeds', :id => params[:id	]}, :multipart => true)%>
+	<%= collection_multiple_select('jobs', 'id', Job.find(:all, :conditions => ['job_number = ? && id != ?', @job.job_number, params[:id]] ), :id, :version_name) %>
+  <%= submit_tag "Copy" %>
+  </form>
+	</div>
+
+<div id = "context">
+	<b><%= link_to @job.job_number, job_path(params[:id]) %></b> (<%= @job.client.organization %>) &nbsp;&nbsp;
+	<b>Job Name:</b> <%= @job.job_name %> &nbsp;&nbsp;
+	<b>Version:</b> <%= @job.version_name %>
+</div>
+
+<table>
+	<th>Seed</th>
+	<th>SCF</th>
+
+<% for seed in @seeds %>
+	<tr class="<%= cycle("even", "odd") %>">
+		<td><%= seed.reference_name %>&nbsp;</td>
+		<td><%= seed.scf.description if seed.scf %></td>
+		<td><%= link_to 'edit', edit_seed_path(seed) %></td>
+		<td><%= link_to '[ x ]', seed_path(seed), :confirm => 'Are you sure?', :method => :delete %></td>
+	</tr>
+<% end %>
+</table>
+<div id ="pages">
+<%= will_paginate @seeds %>
+</div>
+	<div id ="seed_upload" style="display:none">
+		<%= form_tag({:controller => 'jobs', :action=> 'uploadseeds'}, :multipart => true)%>
+	
+		<%= hidden_field :uploads, :version_id, :value => params[:id] %>
+		<%= file_field("uploads", "file") %>
+		<%= submit_tag "Upload" %>
+		<br/>
+		</form>
+	</div>
+	

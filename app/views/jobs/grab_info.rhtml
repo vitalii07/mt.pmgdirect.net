@@ -1,0 +1,9 @@
+<script language="Javascript">
+
+window.parent.document.getElementById('job_job_name').value = '<%=@job.job_name %>';
+window.parent.document.getElementById('job_job_number').value = '<%= @job.job_number %>';
+window.parent.document.getElementById('client_name').value = "<%=@job.client.id %>";
+window.parent.myLightWindow.deactivate();
+
+
+</script>

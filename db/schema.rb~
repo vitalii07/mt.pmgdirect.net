@@ -1,0 +1,370 @@
+# This file is auto-generated from the current state of the database. Instead of editing this file,
+# please use the migrations feature of Active Record to incrementally modify your database, and
+# then regenerate this schema definition.
+#
+# Note that this schema.rb definition is the authoritative source for your database schema. If you need
+# to create the application database on another system, you should be using db:schema:load, not running
+# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended to check this file into your version control system.
+
+ActiveRecord::Schema.define(:version => 20150205033221) do
+
+  create_table "archived_confirmstats", :force => true do |t|
+    t.column "scf",          :string,   :limit => 5,  :default => "0"
+    t.column "operation",    :integer,                :default => 0
+    t.column "processed_at", :datetime
+    t.column "postnet",      :string,   :limit => 15, :default => "0"
+    t.column "planet",       :string,                 :default => "0"
+    t.column "file_date",    :date
+    t.column "created_at",   :datetime
+    t.column "seed_id",      :integer
+    t.column "stat_file",    :string
+    t.column "csheader_id",  :integer
+    t.column "scf_prefix",   :string,   :limit => 3
+    t.column "tracking_type", :string,   :limit => 3
+    t.column "job_number",   :string,   :limit => 5
+    t.column "version_tracking_number", :string,   :limit => 4
+    t.column "state",   :string,   :limit => 2
+    t.column "deleted_at",   :datetime
+  end
+
+  create_table "archived_jobs", :force => true do |t|
+    t.column "client_id",                       :integer
+    t.column "job_name",                        :string,   :limit => 75
+    t.column "job_number",                      :string,   :limit => 20
+    t.column "created_at",                      :datetime
+    t.column "mail_date",                       :datetime
+    t.column "c_total_seeds_delivered",         :integer
+    t.column "c_total_percent_seeds_delivered", :float
+    t.column "c_summed_average_delivered",      :integer
+    t.column "c_number_of_non_zero_versions",   :integer
+    t.column "c_total_qty_sent",                :integer
+    t.column "c_total_seeds_sent",              :integer
+    t.column "c_first_mailshop",                :string
+    t.column "seeds_definition_file",           :string
+    t.column "user_id",                         :integer
+    t.column "client_job_number",               :string
+    t.column "track_returns_type",              :string
+    t.column "c_total_returns_sent",            :integer
+    t.column "c_total_returns_received",        :integer
+    t.column "deleted_at",                      :datetime
+  end
+
+  add_index "archived_jobs", ["id"], :name => "index_archived_jobs_on_id"
+
+  create_table "archived_seeds", :force => true do |t|
+    t.column "version_id",     :integer
+    t.column "scf_id",         :integer
+    t.column "reference_name", :string
+    t.column "name_prefix",    :string,   :limit => 5
+    t.column "first_name",     :string
+    t.column "last_name",      :string
+    t.column "address",        :string,   :limit => 200
+    t.column "address2",       :string,   :limit => 200
+    t.column "city",           :string
+    t.column "state",          :string
+    t.column "zipcode",        :string
+    t.column "postnet",        :string,   :limit => 25
+    t.column "physical",       :string,   :limit => 3
+    t.column "core",           :boolean,                 :default => false
+    t.column "created_at",     :datetime,                :default => '2008-06-21 06:15:14'
+    t.column "updated_at",     :datetime
+    t.column "first_hit",      :datetime
+    t.column "zip_hit",        :string,   :limit => 5
+    t.column "imb",            :string
+    t.column "planet",         :string,   :limit => 20
+    t.column "deleted_at",     :datetime
+  end
+
+  add_index "archived_seeds", ["id"], :name => "index_archived_seeds_on_id"
+  add_index "archived_seeds", ["version_id"], :name => "index_archived_seeds_on_version_id"
+
+  create_table "archived_versions", :force => true do |t|
+    t.column "mailshop_id",                     :integer
+    t.column "job_id",                          :integer
+    t.column "version_name",                    :string,   :limit => 75
+    t.column "mail_type",                       :integer,  :limit => 2
+    t.column "mail_class",                      :string,   :limit => 30
+    t.column "mail_date",                       :datetime
+    t.column "quantity",                        :integer
+    t.column "subscriber_id",                   :integer,                :default => 179
+    t.column "check_digit",                     :integer,  :limit => 2
+    t.column "planet_code",                     :string
+    t.column "created_at",                      :datetime
+    t.column "updated_at",                      :datetime
+    t.column "east",                            :float
+    t.column "west",                            :float
+    t.column "mountain",                        :float
+    t.column "central",                         :float
+    t.column "planet_offset",                   :integer
+    t.column "c_total_seeds_delivered",         :integer
+    t.column "c_total_percent_seeds_delivered", :float
+    t.column "c_summed_average_delivered",      :integer
+    t.column "version_tracking_number",         :string
+    t.column "c_total_returns_sent",            :integer
+    t.column "c_total_returns_received",        :integer
+    t.column "deleted_at",                      :datetime
+  end
+
+  add_index "archived_versions", ["id"], :name => "index_archived_versions_on_id"
+  add_index "archived_versions", ["job_id"], :name => "index_archived_versions_on_job_id"
+
+  create_table "clients", :force => true do |t|
+    t.column "organization",   :string,  :limit => 100
+    t.column "address",        :string,  :limit => 250
+    t.column "client_type",    :string
+    t.column "superclient_id", :integer
+    t.column "logo",           :string
+  end
+
+  add_index "clients", ["superclient_id"], :name => "index_clients_on_superclient_id"
+
+  create_table "confirmstats", :force => true do |t|
+    t.column "scf",          :string,   :limit => 5,  :default => "0"
+    t.column "operation",    :integer,                :default => 0
+    t.column "processed_at", :datetime
+    t.column "postnet",      :string,   :limit => 15, :default => "0"
+    t.column "planet",       :string,                 :default => "0"
+    t.column "file_date",    :date
+    t.column "created_at",   :datetime
+    t.column "seed_id",      :integer
+    t.column "stat_file",    :string
+    t.column "csheader_id",  :integer
+    t.column "scf_prefix",   :string,   :limit => 3
+    t.column "tracking_type",   :string,   :limit => 3
+    t.column "job_number",   :string,   :limit => 5
+    t.column "version_tracking_number",   :string,   :limit => 4
+    t.column "state",   :string,   :limit => 2
+  end
+
+  add_index "confirmstats", ["csheader_id"], :name => "index_confirmstats_on_csheader_id"
+  add_index "confirmstats", ["planet"], :name => "index_confirmstats_on_planet"
+  add_index "confirmstats", ["postnet"], :name => "index_confirmstats_on_postnet"
+  add_index "confirmstats", ["seed_id"], :name => "index_confirmstats_on_seed_id"
+  add_index "confirmstats", ["scf_prefix"],  :name => "index_confirmstats_on_scf_prefix"
+  add_index "confirmstats", ["file_date"], :name => "index_confirmstats_on_file_date"
+  add_index "confirmstats", ["job_number"], :name => "index_confirmstats_on_job_number"
+  add_index "confirmstats", ["tracking_type"], :name => "index_confirmstats_on_tracking_type"
+  add_index "confirmstats", ["version_tracking_number"], :name => "index_confirmstats_on_version_tracking_number"
+  add_index "confirmstats", ["state"], :name => "index_confirmstats_on_state"
+
+
+  create_table "csheaders", :force => true do |t|
+    t.column "file_date", :date
+    t.column "file_type", :string
+  end
+
+  create_table "jobs", :force => true do |t|
+    t.column "client_id",                       :integer
+    t.column "job_name",                        :string,   :limit => 75
+    t.column "job_number",                      :string,   :limit => 20
+    t.column "created_at",                      :datetime
+    t.column "mail_date",                       :datetime
+    t.column "c_total_seeds_delivered",         :integer
+    t.column "c_total_percent_seeds_delivered", :float
+    t.column "c_summed_average_delivered",      :integer
+    t.column "c_number_of_non_zero_versions",   :integer
+    t.column "c_total_qty_sent",                :integer
+    t.column "c_total_seeds_sent",              :integer
+    t.column "c_first_mailshop",                :string
+    t.column "seeds_definition_file",           :string
+    t.column "user_id",                         :integer
+    t.column "client_job_number",               :string
+    t.column "track_returns_type",              :string
+    t.column "c_total_returns_sent",            :integer
+    t.column "c_total_returns_received",        :integer
+  end
+
+  create_table "mailshops", :force => true do |t|
+    t.column "name",    :string, :limit => 140
+    t.column "address", :string, :limit => 150
+    t.column "region",  :string,                :default => "east"
+  end
+
+  create_table "managements", :force => true do |t|
+    t.column "user_id",    :integer,  :limit => 8
+    t.column "client_id",  :integer,  :limit => 8
+    t.column "updated_at", :datetime
+    t.column "created_at", :datetime
+  end
+
+  create_table "messages", :force => true do |t|
+    t.column "status",     :string
+    t.column "file_type",  :string
+    t.column "file_date",  :date
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+    t.column "job_id",     :string
+    t.column "version_names", :text
+  end
+
+  create_table "reports", :force => true do |t|
+    t.column "start_date", :datetime
+    t.column "end_date",   :datetime
+    t.column "version_id", :integer
+    t.column "user_id",    :integer
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+  end
+
+  create_table "scf_zip_prefixes", :force => true do |t|
+    t.column "scf_id", :integer
+    t.column "prefix", :string
+  end
+
+  add_index "scf_zip_prefixes", ["prefix"], :name => "index_scf_zip_prefixes_on_prefix"
+  add_index "scf_zip_prefixes", ["scf_id"], :name => "index_scf_zip_prefixes_on_scf_id"
+
+  create_table "scfs", :force => true do |t|
+    t.column "scf_number",  :integer
+    t.column "address",     :string,   :limit => 150
+    t.column "description", :string,   :limit => 200
+    t.column "region",      :string,   :limit => 12
+    t.column "lat",         :float
+    t.column "lng",         :float
+    t.column "created_at",  :datetime,                :default => '2008-06-21 06:15:14'
+    t.column "updated_at",  :datetime,                :default => '2008-06-21 06:15:14'
+  end
+
+  create_table "searches", :force => true do |t|
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+  end
+
+  create_table "seeds", :force => true do |t|
+    t.column "version_id",     :integer
+    t.column "scf_id",         :integer
+    t.column "reference_name", :string
+    t.column "name_prefix",    :string,   :limit => 5
+    t.column "first_name",     :string
+    t.column "last_name",      :string
+    t.column "address",        :string,   :limit => 200
+    t.column "address2",       :string,   :limit => 200
+    t.column "city",           :string
+    t.column "state",          :string
+    t.column "zipcode",        :string
+    t.column "postnet",        :string,   :limit => 25
+    t.column "physical",       :string,   :limit => 3
+    t.column "core",           :boolean,                 :default => false
+    t.column "created_at",     :datetime,                :default => '2008-06-21 06:15:14'
+    t.column "updated_at",     :datetime
+    t.column "first_hit",      :datetime
+    t.column "zip_hit",        :string,   :limit => 5
+    t.column "imb",            :string
+    t.column "planet",         :string,   :limit => 20
+  end
+
+  add_index "seeds", ["imb"], :name => "index_seeds_on_imb"
+  add_index "seeds", ["postnet"], :name => "index_seeds_on_postnet"
+  add_index "seeds", ["version_id"], :name => "index_seeds_on_version_id"
+  add_index "seeds", ["planet"], :name => "index_seeds_on_planet"
+  add_index "seeds", ["zip_hit"], :name => "index_seeds_on_zip_hit"
+
+  create_table "temp20091019212058472952", :force => true do |t|
+    t.column "scf",          :string,   :limit => 5,  :default => "0"
+    t.column "operation",    :integer,                :default => 0
+    t.column "processed_at", :datetime
+    t.column "postnet",      :string,   :limit => 15, :default => "0"
+    t.column "planet",       :integer,  :limit => 8,  :default => 0
+    t.column "file_date",    :date
+    t.column "created_at",   :datetime
+    t.column "seed_id",      :integer
+  end
+
+  create_table "temp20091019212443266543", :force => true do |t|
+    t.column "scf",          :string,   :limit => 5,  :default => "0"
+    t.column "operation",    :integer,                :default => 0
+    t.column "processed_at", :datetime
+    t.column "postnet",      :string,   :limit => 15, :default => "0"
+    t.column "planet",       :integer,  :limit => 8,  :default => 0
+    t.column "file_date",    :date
+    t.column "created_at",   :datetime
+    t.column "seed_id",      :integer
+  end
+
+  create_table "temp20091019212642804587", :force => true do |t|
+    t.column "scf",          :string,   :limit => 5,  :default => "0"
+    t.column "operation",    :integer,                :default => 0
+    t.column "processed_at", :datetime
+    t.column "postnet",      :string,   :limit => 15, :default => "0"
+    t.column "planet",       :integer,  :limit => 8,  :default => 0
+    t.column "file_date",    :date
+    t.column "created_at",   :datetime
+    t.column "seed_id",      :integer
+  end
+
+  create_table "temp20091019213539139904", :force => true do |t|
+    t.column "scf",          :string,   :limit => 5,  :default => "0"
+    t.column "operation",    :integer,                :default => 0
+    t.column "processed_at", :datetime
+    t.column "postnet",      :string,   :limit => 15, :default => "0"
+    t.column "planet",       :integer,  :limit => 8,  :default => 0
+    t.column "file_date",    :date
+    t.column "created_at",   :datetime
+    t.column "seed_id",      :integer
+  end
+
+  create_table "temp20100820162211582236", :force => true do |t|
+    t.column "scf",          :string,   :limit => 5,  :default => "0"
+    t.column "operation",    :integer,                :default => 0
+    t.column "processed_at", :datetime
+    t.column "postnet",      :string,   :limit => 15, :default => "0"
+    t.column "planet",       :integer,  :limit => 8,  :default => 0
+    t.column "file_date",    :date
+    t.column "created_at",   :datetime
+    t.column "seed_id",      :integer
+  end
+
+  create_table "temp20100820162747479104", :force => true do |t|
+    t.column "scf",          :string,   :limit => 5,  :default => "0"
+    t.column "operation",    :integer,                :default => 0
+    t.column "processed_at", :datetime
+    t.column "postnet",      :string,   :limit => 15, :default => "0"
+    t.column "planet",       :integer,  :limit => 8,  :default => 0
+    t.column "file_date",    :date
+    t.column "created_at",   :datetime
+    t.column "seed_id",      :integer
+  end
+
+  create_table "users", :force => true do |t|
+    t.column "name",                      :string,   :limit => 50
+    t.column "passkey",                   :string,   :limit => 40
+    t.column "client_id",                 :integer
+    t.column "created_at",                :datetime,               :default => '2008-06-21 06:15:14'
+    t.column "user_level",                :integer,                :default => 0,                     :null => false
+    t.column "email",                     :string
+    t.column "remember_token",            :string
+    t.column "remember_token_expires_at", :datetime
+  end
+
+  create_table "versions", :force => true do |t|
+    t.column "mailshop_id",                     :integer
+    t.column "job_id",                          :integer
+    t.column "version_name",                    :string,   :limit => 75
+    t.column "mail_type",                       :integer,  :limit => 2
+    t.column "mail_class",                      :string,   :limit => 30
+    t.column "mail_date",                       :datetime
+    t.column "quantity",                        :integer
+    t.column "subscriber_id",                   :integer,                :default => 179
+    t.column "check_digit",                     :integer,  :limit => 2
+    t.column "planet_code",                     :string
+    t.column "created_at",                      :datetime
+    t.column "updated_at",                      :datetime
+    t.column "east",                            :float
+    t.column "west",                            :float
+    t.column "mountain",                        :float
+    t.column "central",                         :float
+    t.column "planet_offset",                   :integer
+    t.column "c_total_seeds_delivered",         :integer
+    t.column "c_total_percent_seeds_delivered", :float
+    t.column "c_summed_average_delivered",      :integer
+    t.column "version_tracking_number",         :string
+    t.column "c_total_returns_sent",            :integer
+    t.column "c_total_returns_received",        :integer
+  end
+
+  add_index "versions", ["planet_code"], :name => "index_versions_on_planet_code"
+
+end

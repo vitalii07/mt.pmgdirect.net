@@ -1,0 +1,4 @@
+development: localhost:6379
+test: localhost:6379:1
+production: 192.168.0.32
+staging: 192.168.0.132:6379

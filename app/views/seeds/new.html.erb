@@ -1,0 +1,10 @@
+<h1>Add a new seed</h1>
+
+<%= error_messages_for :seed %>
+
+<% form_for(@seed) do |f| %>
+  <p>
+    <%= render(:partial => 'form') %>
+    <%= f.submit "Create", :class => "large-button" %>
+  </p>
+<% end %>

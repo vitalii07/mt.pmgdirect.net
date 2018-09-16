@@ -1,0 +1,25 @@
+<h2>Data by Seed</h2>
+
+<% version_ids = Version.find(:all, :conditions => ['job_id = ?', params[:id]]).map{|j| j.id} %>
+<% planet_code = Version.find(:all, :conditions => ['job_id = ?', params[:id]]).map{|m| m.planet_code}.uniq %>
+<% planet_code = planet_code.map{|r| r.to_s.chop} %>
+<table>
+
+  <tr>
+  	<th align="left"> Version </th>
+  	<th align="left"> SCF Name</th>
+  	<th align="left"> Hit SCF on: </th>
+  </tr>
+
+<% 	  for seed in @seeds %>
+
+<% @data = Confirmstat.find(:first, :conditions => ['postnet = ? AND planet in (?)', seed.postnet, planet_code], :order => 'id desc') %>
+<tr>
+<td><%= seed.version.version_name %></td>
+<td><%= seed.scf.description %></td>
+<td><%= @data.file_date.strftime("%b %d, %Y") if @data %></td>
+</tr>
+
+
+<% end %>
+</table>
